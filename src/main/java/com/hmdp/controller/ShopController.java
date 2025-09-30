@@ -31,10 +31,20 @@ public class ShopController {
      * @param id 商铺id
      * @return 商铺详情数据
      */
+
+
+    // 原始的，直接从数据库查
+//    @GetMapping("/{id}")
+//    public Result queryShopById(@PathVariable("id") Long id) {
+//        return Result.ok(shopService.getById(id));
+//    }
+
     @GetMapping("/{id}")
     public Result queryShopById(@PathVariable("id") Long id) {
-        return Result.ok(shopService.getById(id));
+        // 这里加了两个缓存策略的改进，一是查的时候，给新增到redis的数据加过期时间
+        return Result.ok(shopService.queryByiId(id));
     }
+
 
     /**
      * 新增商铺信息
@@ -56,10 +66,18 @@ public class ShopController {
      */
     @PutMapping
     public Result updateShop(@RequestBody Shop shop) {
-        // 写入数据库
-        shopService.updateById(shop);
-        return Result.ok();
+        // 二是根据id修改店铺时候，先修改数据库，再删除缓存
+        return shopService.update(shop);
     }
+
+    // 原始的更新逻辑，只更新数据库
+//    @PutMapping
+//    public Result updateShop(@RequestBody Shop shop) {
+//        shopService.updateById(shop);
+//        return Result.ok();
+//    }
+
+
 
     /**
      * 根据商铺类型分页查询商铺信息
