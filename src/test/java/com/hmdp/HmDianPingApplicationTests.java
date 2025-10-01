@@ -14,6 +14,12 @@ class HmDianPingApplicationTests {
 
     private ExecutorService es = Executors.newFixedThreadPool(500);
 
+//    @Test
+//    void testIdWorkerJup() {
+//        long id = redisIdWorker.nextId("test");
+//        System.out.println("id = " + id);
+//    }
+
     @Test
     void testIdWorker() throws InterruptedException {
         CountDownLatch latch = new CountDownLatch(300);
